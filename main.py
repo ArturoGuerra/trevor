@@ -69,7 +69,7 @@ async def on_message(message):
     if message.content == PREFIX and allowed_output(message.channel.id):
         try:
             text = markovify.NewlineText(MESSAGES, state_size=1)
-            msg = text.make_short_sentence(140)
+            msg = text.make_short_sentence(2000)
             await message.channel.send(msg)
         except Exception:
             pass
