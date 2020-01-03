@@ -75,6 +75,23 @@ async def on_message(message):
             pass
 
 
+@client.event
+async def on_guild_join(guild):
+    for channel in guild.channels:
+        if type(channel) is discord.TextChannel:
+            try:
+                messages = await channel.history(limit=1000000).flatten()
+                count = 0
+                for m in messages:
+                    add_message(m)
+                    count += 1
+                print(f"Added: {count} messages")
+            except Exception:
+                print("Error adding messages from new guild")
+
+
+
+
 def allowed_output(id):
     if len(OUTPUT_CHANNELS) == 0:
         return True
