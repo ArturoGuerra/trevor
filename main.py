@@ -52,13 +52,20 @@ client = discord.Client()
 MESSAGES = ""
 @client.event
 async def on_ready():
-    global MESSAGES
     print("Populating message cache...")
-    MESSAGES = await get_messages()
+    await get_messages()
     print("Done populating message cache!")
+
+    while (True):
+        await asyncio.sleep(60 * 20)
+        print("Updating message cache...")
+        await get_messages()
+        print("Done updating message cache...")
 
 
 async def get_messages():
+    global MESSAGES
+    MESSAGES = ""
     msgs = ""
     channels = []
 
@@ -85,13 +92,13 @@ async def get_messages():
             print(f"Added: {count} messages")
         except Exception:
             print(f"Error processing channel: {channel.name}")
-    return msgs
+    MESSAGES = msgs
 
 @client.event
 async def on_message(message):
     global MESSAGES
     add_message(message)
-    if message.content == PREFIX and allowed_output(message.channel.id):
+    if message.content.lower() == PREFIX and allowed_output(message.channel.id):
         try:
             text = markovify.NewlineText(MESSAGES, state_size=1)
             msg = text.make_short_sentence(2000)
@@ -102,17 +109,7 @@ async def on_message(message):
 
 @client.event
 async def on_guild_join(guild):
-    for channel in guild.channels:
-        if type(channel) is discord.TextChannel:
-            try:
-                messages = await channel.history(limit=1000000).flatten()
-                count = 0
-                for m in messages:
-                    add_message(m)
-                    count += 1
-                print(f"Added: {count} messages")
-            except Exception:
-                print(f"Error adding messages from channel: {channel.name}")
+    await get_messages()
 
 
 client.run(TOKEN)
