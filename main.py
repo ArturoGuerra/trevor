@@ -65,7 +65,6 @@ async def on_ready():
 
 async def get_messages():
     global MESSAGES
-    MESSAGES = ""
     msgs = ""
     channels = []
 
