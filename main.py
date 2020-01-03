@@ -19,6 +19,31 @@ def get_output_channels():
     print(f"Output Channels: {channels}")
     return channels
 
+def allowed_output(id):
+    if len(OUTPUT_CHANNELS) == 0:
+        return True
+    else:
+        if id in OUTPUT_CHANNELS:
+            return True
+
+    return False
+
+
+def check_channel(id):
+    if len(INPUT_CHANNELS) == 0:
+        return True
+    else:
+        if id in INPUT_CHANNELS:
+            return True
+
+    return False
+
+def add_message(m):
+    global MESSAGES
+    if m.content != "" and not m.author.bot and PREFIX not in m.content and check_channel(m.channel.id):
+        MESSAGES += m.content + "\n"
+        print("Added: 1 message to cache")
+
 #empty array for every channel and array for one or more channels
 INPUT_CHANNELS = get_input_channels()
 OUTPUT_CHANNELS = get_output_channels()
@@ -89,32 +114,5 @@ async def on_guild_join(guild):
             except Exception:
                 print("Error adding messages from new guild")
 
-
-
-
-def allowed_output(id):
-    if len(OUTPUT_CHANNELS) == 0:
-        return True
-    else:
-        if id in OUTPUT_CHANNELS:
-            return True
-
-    return False
-
-
-def check_channel(id):
-    if len(INPUT_CHANNELS) == 0:
-        return True
-    else:
-        if id in INPUT_CHANNELS:
-            return True
-
-    return False
-
-def add_message(m):
-    global MESSAGES
-    if m.content != "" and not m.author.bot and PREFIX not in m.content and checkchannel(m.channel.id):
-        MESSAGES += m.content + "\n"
-        print("Added: 1 message to cache")
 
 client.run(TOKEN)
