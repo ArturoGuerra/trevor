@@ -112,7 +112,7 @@ async def on_guild_join(guild):
                     count += 1
                 print(f"Added: {count} messages")
             except Exception:
-                print("Error adding messages from new guild")
+                print(f"Error adding messages from channel: {channel.name}")
 
 
 client.run(TOKEN)
